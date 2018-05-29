@@ -731,7 +731,6 @@ public class DataBaseServiceImpl extends CommonServiceImpl implements DataBaseSe
 					throw new BusinessException("执行JAVA增强出现异常！");
 				} 
 			}
-
 		}
 	}
 	

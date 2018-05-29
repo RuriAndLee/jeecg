@@ -61,15 +61,15 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
                 while(rs.next()) {  
                 	String id = rs.getString("id");
                 	String goodsno = rs.getString("goodsno");
-                	String stockqty = rs.getString("qty");
+                	String stockqty = rs.getString("fetchqty");
                 	String goodsunit = rs.getString("goodsunit");
                 	String goodsname = rs.getString("goodsname");
                 	String goodssize = rs.getString("goodssize");
                 	
                 	String locno = findLoc(goodsno,con);
                 	
-                	//输出当locno为null 怎么提示才好
                     String insertsql = " insert into wms_stock (id,locno,goodsno,goodsname,goodssize,goodsunit,stockqty) values (?,?,?,?,?,?,?)";
+
                 	insertst = con.prepareStatement(insertsql);
                 	insertst.setString(1, id);
                 	insertst.setString(2, locno);
@@ -96,7 +96,8 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
         }     
         catch(Exception e)    
         {    
-            System.out.println("Connect fail:" + e.getMessage());    
+            System.out.println("Connect fail:" + e.getMessage());
+            e.printStackTrace();
         } 
     }
     
@@ -105,8 +106,8 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
         ResultSet rst = null;  
         PreparedStatement st = null;  
         PreparedStatement insertst = null;  
-        String sql = "select s.locno from wms_stock s where s.goodsno = ? ";//增加顶层标志判断
-        String locno = null;
+        String sql = "select s.locno from wms_stock s where s.goodsno = ? ";//增加顶层标志判断 
+        String locno = null; 
         try{                                                                                   
             st=con.prepareStatement(sql);
             st.setString(1, goodsno);
@@ -117,18 +118,20 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
                 }
             }
             if(locno == null || locno == ""){
-            	sql = "select min(l.locno)locno from wms_loc l where not exists (select 1 from wms_stock s where s.locno = l.locno) order by l.loclevel";
+            	sql = "select min(l.locno)locno from wms_loc l where not exists (select 1 from wms_stock s where s.locno = l.locno) order by l.loclevel"; 
             	st.clearParameters();
             	st=con.prepareStatement(sql);
-                rst=st.executeQuery();  
+                rst=st.executeQuery(); 
                 if(rst!=null) {
-                    while(rst.next()) { 
-                    	
-                    	locno = rst.getString("locno");
-                    	
-                    }
+                    while(rst.next()) {                    	
+                    	locno = rst.getString("locno");                   	
+                    }           
                 }
-            }
+                else if(rst==null){
+                	throw new BusinessException("111");
+                }
+            } 
+         
         }catch(Exception e){    
             System.out.println("Connect fail:" + e.getMessage());    
         }finally{
@@ -142,8 +145,9 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
 			}  
         }
         return locno;
+        
     }
-  //查找货位
+
     public void updateFetchStatus(String fetchid,Connection con) throws BusinessException {
         PreparedStatement sta = null;  
         PreparedStatement insertst = null;  
