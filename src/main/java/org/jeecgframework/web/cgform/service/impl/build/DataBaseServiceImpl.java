@@ -728,7 +728,8 @@ public class DataBaseServiceImpl extends CommonServiceImpl implements DataBaseSe
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 					e.printStackTrace();
-					throw new BusinessException("执行JAVA增强出现异常！");
+					//throw new BusinessException("执行JAVA增强出现异常！");
+					  throw new BusinessException(e.getMessage());
 				} 
 			}
 		}

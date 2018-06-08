@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,7 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
 
     public void execute(String tableName,Map map) throws BusinessException {
     	LogUtil.info("============调用[java增强]成功!========tableName:"+tableName+"===map==="+map);
-    	String status = (String)map.get("status");
+    	String status = (String)map.get("status");   	
     	if (status == "2" || status.equals("2")) {
     		throw new BusinessException("已经提交的订单不能再次上架");
 		}
@@ -32,7 +33,8 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
         PreparedStatement sts = null;  
         PreparedStatement insertst = null;  
         String sql = "SELECT @rowno:=@rowno+1 as rowno,(select IFNULL(max(id),0)+@rowno:=@rowno from wms_stock s)id, f.goodsno, f.fetchqty, f.goodsunit, f.goodsname, f.goodssize FROM wms_fetchdtl f ,(select @rowno:=0)a WHERE f.fetchid = ?;";
-        
+
+      
         try    
         {    
             Class.forName(driver);    
@@ -67,6 +69,9 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
                 	String goodssize = rs.getString("goodssize");
                 	
                 	String locno = findLoc(goodsno,con);
+                	if(locno == null || locno == ""){
+                		throw new BusinessException("当前无空货位");
+                	}
                 	
                     String insertsql = " insert into wms_stock (id,locno,goodsno,goodsname,goodssize,goodsunit,stockqty) values (?,?,?,?,?,?,?)";
 
@@ -97,7 +102,8 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
         catch(Exception e)    
         {    
             System.out.println("Connect fail:" + e.getMessage());
-            e.printStackTrace();
+			throw new BusinessException(e.getMessage());
+
         } 
     }
     
@@ -127,9 +133,6 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
                     	locno = rst.getString("locno");                   	
                     }           
                 }
-                else if(rst==null){
-                	throw new BusinessException("111");
-                }
             } 
          
         }catch(Exception e){    
@@ -145,9 +148,8 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
 			}  
         }
         return locno;
-        
     }
-
+    //修改入库状态
     public void updateFetchStatus(String fetchid,Connection con) throws BusinessException {
         PreparedStatement sta = null;  
         PreparedStatement insertst = null;  
@@ -169,4 +171,9 @@ public class CgformJavaInterDemo implements CgformEnhanceJavaInter {
 			}  
         }
     }
+
+	public void execute(String tableName, String map) {
+		// TODO Auto-generated method stub
+		
+	}
 }
