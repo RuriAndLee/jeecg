@@ -17,7 +17,7 @@ public class DynamicDBTest extends AbstractUnitTest {
 	static {
 		DynamicDataSourceEntity dynamicSourceEntity = new DynamicDataSourceEntity();
 		String driverClassName = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://localhost:3306/jeecg_376org";
+		String url = "jdbc:mysql://localhost:3306/jeecg_371";
 		String dbUser = "root";
 		String dbPassword = "ea3d519525358e00";
 
