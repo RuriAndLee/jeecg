@@ -54,7 +54,7 @@ public class UserRestController {
 	private Validator validator;
 
 	/**
-	 * 访问地址：http://localhost:8080/jeecg/rest/user
+	 * 访问地址：http://localhost:8888/jeecg/rest/user
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
@@ -68,7 +68,7 @@ public class UserRestController {
 	}
 
 	/**
-	 * 访问地址：http://localhost:8080/jeecg/rest/user/{id}
+	 * 访问地址：http://localhost:8888/jeecg/rest/user/{id}
 	 * @param id
 	 * @return
 	 */

@@ -11,31 +11,31 @@ import com.alibaba.fastjson.JSONObject;
 public class JwtRestfulOnlineFormDemo {
 	
 	public static String getToken(String userName,String password){
-		String url = "http://localhost:8080/jeecg/rest/tokens?username="+userName+"&password="+password;
+		String url = "http://localhost:8888/jeecg/rest/tokens?username="+userName+"&password="+password;
 		String token= JwtHttpUtil.httpRequest(url, "POST", null);
 		return token;
 	}
 	//online表单查询
 	public static JSONObject getOnlineForm(String token,String tableName,String id){
-		String url = "http://localhost:8080/jeecg/rest/cgFormDataController/get/"+tableName+"/"+id;
+		String url = "http://localhost:8888/jeecg/rest/cgFormDataController/get/"+tableName+"/"+id;
 		JSONObject resp= JwtHttpUtil.httpRequest(url, "GET", null,token);
 		return resp;
 	}
 	//online表单 删除
 	public static JSONObject deleteOnlineForm(String token,String tableName,String id){
-		String url = "http://localhost:8080/jeecg/rest/cgFormDataController/delete/"+tableName+"/"+id;
+		String url = "http://localhost:8888/jeecg/rest/cgFormDataController/delete/"+tableName+"/"+id;
 		JSONObject resp= JwtHttpUtil.httpRequest(url, "DELETE", null,token);
 		return resp;
 	}
 	//online表单 新增
 	public static JSONObject addOnlineForm(String token,String body){
-		String url = "http://localhost:8080/jeecg/rest/cgFormDataController/add";
+		String url = "http://localhost:8888/jeecg/rest/cgFormDataController/add";
 		JSONObject resp= JwtHttpUtil.httpRequest(url, "POST", body,token);
 		return resp;
 	}
 	//online表单 修改
 	public static JSONObject updateOnlineForm(String token,String body){
-		String url = "http://localhost:8080/jeecg/rest/cgFormDataController/update";
+		String url = "http://localhost:8888/jeecg/rest/cgFormDataController/update";
 		JSONObject resp= JwtHttpUtil.httpRequest(url, "POST", body,token);
 		return resp;
 	}
